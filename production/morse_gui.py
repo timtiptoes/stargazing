@@ -85,7 +85,7 @@ class simpleapp_tk(Tkinter.Tk):
     if not(__debug__): GPIOController().available_pins = [57]
 
     if not(__debug__): led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
-    factor=1
+    factor=2
 
     def __init__(self,parent):
         Tkinter.Tk.__init__(self,parent)
@@ -155,9 +155,9 @@ class simpleapp_tk(Tkinter.Tk):
         inputfull=self.entryVariable.get()
         input=inputfull[:140]
 	if len(input)>10:
-	        self.factor=0.1/(1+(len(input)-10)/130)
+	        self.factor=0.15/(1+(len(input)-10)/130)
 	else:
-		self.factor=0.1
+		self.factor=0.15
         coded_output=""
         for letter in input:
             if (letter == ' '):

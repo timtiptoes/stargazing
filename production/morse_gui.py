@@ -1,16 +1,31 @@
 #!/usr/bin/python
+
+'''
+To do
+ - verify that this runs on  tegra
+Improvements
+-be able to pull up previous message and print
+-log all messages sent
+-pull down menu of stars
+-spinning graphic of star with facts about star
+
+'''
+
+
 # -*- coding: iso-8859-1 -*-
 # Taken from http://sebsauvage.net/python/gui/
-# from sysfs.gpio import GPIOController
-# from sysfs.gpio import GPIOPinDirection as Direction
-# from sysfs.gpio import GPIOPinEdge as Edge
+#from sysfs.gpio import GPIOController
+#from sysfs.gpio import GPIOPinDirection as Direction
+#from sysfs.gpio import GPIOPinEdge as Edge
+
+
 import time
 import Tkinter
 
+class simpleapp_tk(Tkinter.Tk):
+
     star_data=[('alpha centauri','4.3'),('betelgeuse','95.6')]
     star_names=[star[0] for star in star_data]
-
-class simpleapp_tk(Tkinter.Tk):
 
     CODE = {' ': ' ',
         "'": '.----.',
@@ -61,9 +76,9 @@ class simpleapp_tk(Tkinter.Tk):
         'Z': '--..',
         '_': '..--.-'}
 
-    #GPIOController().available_pins = [57]
+   # GPIOController().available_pins = [57]
 
-#led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
+    #led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
     factor=1
 
     def __init__(self,parent):
@@ -73,35 +88,27 @@ class simpleapp_tk(Tkinter.Tk):
 
     def initialize(self):
         self.grid()
-       self.variable = Tkinter.StringVar()
+        self.variable = Tkinter.StringVar()
         self.variable.set(self.star_names[0]) # default value
 
         self.w = apply(Tkinter.OptionMenu, (self, self.variable) + tuple(self.star_names))
+
+
        # self.w = Tkinter.OptionMenu(self, self.variable, self.star_names)
         self.w.grid(column=1,row=0,sticky='EW')
+
         self.entryVariable = Tkinter.StringVar()
         self.entry = Tkinter.Entry(self,textvariable=self.entryVariable)
         self.entry.grid(column=0,row=0,sticky='EW')
         self.entry.bind("<Return>", self.OnPressEnter)
-        self.entryVariable.set(u"                ")
-
-        button = Tkinter.Button(self,text=u"Click me !",
-                                command=self.OnButtonClick)
-        button.grid(column=1,row=0)
+        self.entryVariable.set(u"Enter text here.")
 
         self.labelVariable = Tkinter.StringVar()
         label = Tkinter.Label(self,textvariable=self.labelVariable,
-                              anchor="w",fg="white",bg="black",font=("Courier", 300,"bold"))
-        label.grid(column=0,row=1,columnspan=2,sticky='EW')
-        self.labelVariable.set(u"Hello !")
+                              anchor="w", fg="white", bg="black", font=("Courier", 300, "bold"))
 
-####
-        self.label2Variable = Tkinter.StringVar()
-        label2 = Tkinter.Label(self,textvariable=self.label2Variable,
-                              anchor="w",fg="white",bg="black",font=("Courier", 100,"bold"))
-        label2.grid(column=0,row=2,columnspan=2,sticky='EW')
-        self.label2Variable.set(u"")
-####
+        label.grid(column=0,row=1,columnspan=2,sticky='EW')
+        self.labelVariable.set(u"                ")
 
         self.grid_columnconfigure(0,weight=1)
         self.resizable(True,False)
@@ -110,15 +117,14 @@ class simpleapp_tk(Tkinter.Tk):
         self.entry.focus_set()
         self.entry.selection_range(0, Tkinter.END)
 
-    def OnButtonClick(self):
-        self.labelVariable.set( self.entryVariable.get()+" (You clicked the button)" )
-        self.entry.focus_set()
-        self.entry.selection_range(0, Tkinter.END)
 
     def OnPressEnter(self,event):
         input=self.entryVariable.get()
         for letter in input:
-            display_string=letter+":   "
+            if (letter == ' '):
+                display_string = "<pause>"
+            else:
+                display_string = letter + ":   "
             self.labelVariable.set(display_string)
             self.update_idletasks()
             for symbol in self.CODE[letter.upper()]:
@@ -139,23 +145,20 @@ class simpleapp_tk(Tkinter.Tk):
         self.entry.focus_set()
         self.entry.selection_range(0, Tkinter.END)
         display_string=input
-        self.labelVariable.set(u"")
-
-        self.label2Variable.set("sent: "+display_string)
+        self.labelVariable.set(display_string)
         self.update_idletasks()
         self.print_out(display_string,self.variable.get())
 
-
     def dot(self):
-#        led_pin.set()
-        print "dot"
+  #      led_pin.set()
+# print "dot"
         time.sleep(0.2*self.factor)
 #        led_pin.reset()
         time.sleep(0.2*self.factor)
 
     def dash(self):
 #        led_pin.set()
-        print "dash"
+#print "dash"
         time.sleep(0.5*self.factor)
 #        led_pin.reset()
         time.sleep(0.2*self.factor)
@@ -166,7 +169,8 @@ class simpleapp_tk(Tkinter.Tk):
         print message
         print "star: "+star_name
         print "*****************"
-        
+
+
 if __name__ == "__main__":
     app = simpleapp_tk(None)
     app.title('my application')

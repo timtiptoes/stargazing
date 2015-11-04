@@ -7,6 +7,9 @@
 import time
 import Tkinter
 
+    star_data=[('alpha centauri','4.3'),('betelgeuse','95.6')]
+    star_names=[star[0] for star in star_data]
+
 class simpleapp_tk(Tkinter.Tk):
 
     CODE = {' ': ' ',
@@ -70,12 +73,17 @@ class simpleapp_tk(Tkinter.Tk):
 
     def initialize(self):
         self.grid()
+       self.variable = Tkinter.StringVar()
+        self.variable.set(self.star_names[0]) # default value
 
+        self.w = apply(Tkinter.OptionMenu, (self, self.variable) + tuple(self.star_names))
+       # self.w = Tkinter.OptionMenu(self, self.variable, self.star_names)
+        self.w.grid(column=1,row=0,sticky='EW')
         self.entryVariable = Tkinter.StringVar()
         self.entry = Tkinter.Entry(self,textvariable=self.entryVariable)
         self.entry.grid(column=0,row=0,sticky='EW')
         self.entry.bind("<Return>", self.OnPressEnter)
-        self.entryVariable.set(u"Enter text here.")
+        self.entryVariable.set(u"                ")
 
         button = Tkinter.Button(self,text=u"Click me !",
                                 command=self.OnButtonClick)
@@ -135,6 +143,8 @@ class simpleapp_tk(Tkinter.Tk):
 
         self.label2Variable.set("sent: "+display_string)
         self.update_idletasks()
+        self.print_out(display_string,self.variable.get())
+
 
     def dot(self):
 #        led_pin.set()
@@ -150,6 +160,13 @@ class simpleapp_tk(Tkinter.Tk):
 #        led_pin.reset()
         time.sleep(0.2*self.factor)
 
+    def print_out(self, message,star_name):
+        print "*****************"
+        print "Following message sent at " + time.ctime()
+        print message
+        print "star: "+star_name
+        print "*****************"
+        
 if __name__ == "__main__":
     app = simpleapp_tk(None)
     app.title('my application')

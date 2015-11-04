@@ -14,7 +14,7 @@ for gifname in os.listdir(dirpath):
     gif=Tkinter.PhotoImage(file=gifpath)
     gifsdict[gifname]=gif
     L.insert(Tkinter.END,gifname)
-
+#test
 L.pack()
 img=Tkinter.Label()
 img.pack()

@@ -21,6 +21,7 @@ Improvements
 
 import time
 import Tkinter
+from morse_tone import sine_tone
 
 class simpleapp_tk(Tkinter.Tk):
 
@@ -76,7 +77,7 @@ class simpleapp_tk(Tkinter.Tk):
         'Z': '--..',
         '_': '..--.-'}
 
-   # GPIOController().available_pins = [57]
+    # GPIOController().available_pins = [57]
 
     #led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
     factor=1
@@ -94,7 +95,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.w = apply(Tkinter.OptionMenu, (self, self.variable) + tuple(self.star_names))
 
 
-       # self.w = Tkinter.OptionMenu(self, self.variable, self.star_names)
+        # self.w = Tkinter.OptionMenu(self, self.variable, self.star_names)
         self.w.grid(column=1,row=0,sticky='EW')
 
         self.entryVariable = Tkinter.StringVar()
@@ -148,28 +149,35 @@ class simpleapp_tk(Tkinter.Tk):
         self.labelVariable.set(display_string)
         self.update_idletasks()
         self.print_out(display_string,self.variable.get())
+        
+    def print_out(self, message, star_name):
+        
+        with open("report.txt", "w") as text_file:
+            text_file.write("*****************\n")
+            text_file.write("Following message sent at " + time.ctime() + "\n")
+            text_file.write(message + "\n")
+            text_file.write("star: " + star_name + "\n")
+            text_file.write("*****************\n")
 
     def dot(self):
-  #      led_pin.set()
-# print "dot"
-        time.sleep(0.2*self.factor)
-#        led_pin.reset()
-        time.sleep(0.2*self.factor)
+        # led_pin.set()
+        # print "dot"
+        sine_tone(
+            # see http://www.phy.mtu.edu/~suits/notefreqs.html
+            frequency=800.00, # Hz, waves per second A4
+            duration=self.factor * 1 # seconds to play sound
+        )
+        # led_pin.reset()
 
     def dash(self):
-#        led_pin.set()
-#print "dash"
-        time.sleep(0.5*self.factor)
-#        led_pin.reset()
-        time.sleep(0.2*self.factor)
-
-    def print_out(self, message,star_name):
-        print "*****************"
-        print "Following message sent at " + time.ctime()
-        print message
-        print "star: "+star_name
-        print "*****************"
-
+        # led_pin.set()
+        # print "dash"
+        sine_tone(
+            # see http://www.phy.mtu.edu/~suits/notefreqs.html
+            frequency=800.00, # Hz, waves per second A4
+            duration=self.factor * 2 # seconds to play sound
+        )
+        # led_pin.reset()
 
 if __name__ == "__main__":
     app = simpleapp_tk(None)

@@ -21,7 +21,7 @@ Improvements
 
 import time
 import Tkinter
-from morse_tone import sine_tone
+import subprocess
 
 class simpleapp_tk(Tkinter.Tk):
 
@@ -158,25 +158,18 @@ class simpleapp_tk(Tkinter.Tk):
             text_file.write(message + "\n")
             text_file.write("star: " + star_name + "\n")
             text_file.write("*****************\n")
+        subprocess.Popen(['lpr', 'report.txt'])
 
     def dot(self):
         # led_pin.set()
         # print "dot"
-        sine_tone(
-            # see http://www.phy.mtu.edu/~suits/notefreqs.html
-            frequency=800.00, # Hz, waves per second A4
-            duration=self.factor * 1 # seconds to play sound
-        )
+        subprocess.call(["cvlc", "--play-and-exit", "dot.wav"]) 
         # led_pin.reset()
 
     def dash(self):
         # led_pin.set()
         # print "dash"
-        sine_tone(
-            # see http://www.phy.mtu.edu/~suits/notefreqs.html
-            frequency=800.00, # Hz, waves per second A4
-            duration=self.factor * 2 # seconds to play sound
-        )
+        subprocess.call(["cvlc", "--play-and-exit", "dash.wav"]) 
         # led_pin.reset()
 
 if __name__ == "__main__":

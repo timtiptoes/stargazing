@@ -14,9 +14,9 @@ Improvements
 
 # -*- coding: iso-8859-1 -*-
 # Taken from http://sebsauvage.net/python/gui/
-#from sysfs.gpio import GPIOController
-#from sysfs.gpio import GPIOPinDirection as Direction
-#from sysfs.gpio import GPIOPinEdge as Edge
+from sysfs.gpio import GPIOController
+from sysfs.gpio import GPIOPinDirection as Direction
+from sysfs.gpio import GPIOPinEdge as Edge
 
 import csv
 import time
@@ -94,9 +94,10 @@ class simpleapp_tk(Tkinter.Tk):
         '_': '..--.-'}
 
 
-    #GPIOController().available_pins = [57]
 
-    #led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
+    GPIOController().available_pins = [57]
+
+    led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
     factor=1
 
     def __init__(self,parent):
@@ -187,20 +188,20 @@ class simpleapp_tk(Tkinter.Tk):
         display_string=input
         self.labelVariable.set(display_string)
         self.update_idletasks()
-        #self.print_out(display_string,self.variable.get())
+        self.print_out(display_string,self.variable.get())
 
     def dot(self):
-  #      led_pin.set()
+        self.led_pin.set()
 
         time.sleep(0.2*self.factor)
-#        led_pin.reset()
+        self.led_pin.reset()
         time.sleep(0.2*self.factor)
 
     def dash(self):
-#        led_pin.set()
+        self.led_pin.set()
 #print "dash"
         time.sleep(0.5*self.factor)
-#        led_pin.reset()
+        self.led_pin.reset()
         time.sleep(0.2*self.factor)
 
     def print_out(self, message,star_name):

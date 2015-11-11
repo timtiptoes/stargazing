@@ -18,14 +18,31 @@ Improvements
 #from sysfs.gpio import GPIOPinDirection as Direction
 #from sysfs.gpio import GPIOPinEdge as Edge
 
-
+import csv
 import time
 import Tkinter
+import subprocess
+
+
+
 
 class simpleapp_tk(Tkinter.Tk):
 
-    star_data=[('alpha centauri','4.3'),('betelgeuse','95.6')]
-    star_names=[star[0] for star in star_data]
+    #star_data=[('alpha centauri','4.3'),('betelgeuse','95.6')]
+
+
+    star_data={}
+    star_names=[]
+    f = open('../data/star_data.txt')
+    csv_f = csv.reader(f)
+
+    for row in csv_f:
+	print row
+  	star_names.append(row[0])
+	star_data[row[0]]=[row[1:]]
+
+
+#    star_names=[star[0] for star in csv_f]
 
     CODE = {' ': ' ',
         "'": '.----.',
@@ -76,7 +93,8 @@ class simpleapp_tk(Tkinter.Tk):
         'Z': '--..',
         '_': '..--.-'}
 
-   # GPIOController().available_pins = [57]
+
+    #GPIOController().available_pins = [57]
 
     #led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
     factor=1
@@ -88,21 +106,20 @@ class simpleapp_tk(Tkinter.Tk):
 
     def initialize(self):
         self.grid()
+
+	#Create pull down menu
         self.variable = Tkinter.StringVar()
         self.variable.set(self.star_names[0]) # default value
-
         self.w = apply(Tkinter.OptionMenu, (self, self.variable) + tuple(self.star_names))
-
-
-       # self.w = Tkinter.OptionMenu(self, self.variable, self.star_names)
         self.w.grid(column=1,row=0,sticky='EW')
 
+
+	#Create text entry box
         self.entryVariable = Tkinter.StringVar()
         self.entry = Tkinter.Entry(self,textvariable=self.entryVariable)
         self.entry.grid(column=0,row=0,sticky='EW')
         self.entry.bind("<Return>", self.OnPressEnter)
         self.entryVariable.set(u"Enter text here.")
-
         self.labelVariable = Tkinter.StringVar()
         label = Tkinter.Label(self,textvariable=self.labelVariable,
                               anchor="w", fg="white", bg="black", font=("Courier", 300, "bold"))
@@ -117,7 +134,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.entry.focus_set()
         self.entry.selection_range(0, Tkinter.END)
 
-
+	#What to do when user presses enter
     def OnPressEnter(self,event):
         input=self.entryVariable.get()
         for letter in input:
@@ -142,12 +159,13 @@ class simpleapp_tk(Tkinter.Tk):
                     time.sleep(0.5*self.factor)
             time.sleep(0.5*self.factor)
 
+	
         self.entry.focus_set()
         self.entry.selection_range(0, Tkinter.END)
         display_string=input
         self.labelVariable.set(display_string)
         self.update_idletasks()
-        self.print_out(display_string,self.variable.get())
+        #self.print_out(display_string,self.variable.get())
 
     def dot(self):
   #      led_pin.set()
@@ -164,13 +182,18 @@ class simpleapp_tk(Tkinter.Tk):
         time.sleep(0.2*self.factor)
 
     def print_out(self, message,star_name):
-        print "*****************"
-        print "Following message sent at " + time.ctime()
-        print message
-        print "star: "+star_name
-        print "*****************"
+   	lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
+	output="*****************\n"
+	
+        output+= "Following message sent at " + time.ctime()+"\n"
+        output+= message+"\n"
+        output+= "star: "+star_name+"\n"
+        output+= "*****************"
+	lpr.stdin.write(output)
+        lpr.stdin.close()
 
 
+	print output
 if __name__ == "__main__":
     app = simpleapp_tk(None)
     app.title('my application')

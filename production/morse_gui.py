@@ -123,9 +123,20 @@ class simpleapp_tk(Tkinter.Tk):
         self.labelVariable = Tkinter.StringVar()
         label = Tkinter.Label(self,textvariable=self.labelVariable,
                               anchor="w", fg="white", bg="black", font=("Courier", 300, "bold"))
+	
+	self.azelVariable = Tkinter.StringVar()
+        azel = Tkinter.Label(self,textvariable=self.azelVariable,
+                              anchor="w", fg="black", bg="white", font=("Courier", 12))
+	azel.grid(column=0,row=1)
 
-        label.grid(column=0,row=1,columnspan=2,sticky='EW')
+	button=Tkinter.Button(self,text=u"Send Message",command=self.OnPressOK)
+	button.grid(column=1,row=1)
+    
+	label.grid(column=0,row=2,columnspan=2,sticky='EW')
         self.labelVariable.set(u"                ")
+
+	
+
 
         self.grid_columnconfigure(0,weight=1)
         self.resizable(True,False)
@@ -134,8 +145,19 @@ class simpleapp_tk(Tkinter.Tk):
         self.entry.focus_set()
         self.entry.selection_range(0, Tkinter.END)
 
-	#What to do when user presses enter
     def OnPressEnter(self,event):
+	star=self.variable.get()
+	az=self.star_data[star][0][1]
+	el=self.star_data[star][0][2]
+	print "I got "+star+" and ("+str(az)+","+str(el)+")"
+	self.azelVariable.set(" Go to "+str(az)+","+str(el))
+        self.update_idletasks()
+
+
+
+
+	#What to do when user presses OK
+    def OnPressOK(self):
         input=self.entryVariable.get()
         for letter in input:
             if (letter == ' '):
@@ -169,7 +191,7 @@ class simpleapp_tk(Tkinter.Tk):
 
     def dot(self):
   #      led_pin.set()
-# print "dot"
+
         time.sleep(0.2*self.factor)
 #        led_pin.reset()
         time.sleep(0.2*self.factor)

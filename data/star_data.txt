@@ -1,0 +1,5 @@
+Altair,16.73,259,28.5,A7IV-V
+Capella,42.80,54,33,M1:_comp
+Vega,25.04,298,29,A0Vvar
+Polaris,432.57,0.5,38,F7:lb-llv_SB
+Deneb,1411.93,299,50,A2Ia

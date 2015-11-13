@@ -14,12 +14,14 @@ Improvements
 
 # -*- coding: iso-8859-1 -*-
 # Taken from http://sebsauvage.net/python/gui/
-from sysfs.gpio import GPIOController
-from sysfs.gpio import GPIOPinDirection as Direction
-from sysfs.gpio import GPIOPinEdge as Edge
+if not(__debug__): from sysfs.gpio import GPIOController
+if not(__debug__): from sysfs.gpio import GPIOPinDirection as Direction
+if not(__debug__): from sysfs.gpio import GPIOPinEdge as Edge
+
 
 import csv
 import time
+import datetime
 import Tkinter
 import subprocess
 
@@ -28,21 +30,15 @@ import subprocess
 
 class simpleapp_tk(Tkinter.Tk):
 
-    #star_data=[('alpha centauri','4.3'),('betelgeuse','95.6')]
-
-
     star_data={}
     star_names=[]
     f = open('../data/star_data.txt')
     csv_f = csv.reader(f)
 
     for row in csv_f:
-	print row
-  	star_names.append(row[0])
-	star_data[row[0]]=[row[1:]]
-
-
-#    star_names=[star[0] for star in csv_f]
+        print row
+        star_names.append(row[0])
+        star_data[row[0]]=row[1:]
 
     CODE = {' ': ' ',
         "'": '.----.',
@@ -95,9 +91,9 @@ class simpleapp_tk(Tkinter.Tk):
 
 
 
-    GPIOController().available_pins = [57]
+    if not(__debug__): GPIOController().available_pins = [57]
 
-    led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
+    if not(__debug__): led_pin=GPIOController().alloc_pin(57,Direction.OUTPUT)
     factor=1
 
     def __init__(self,parent):
@@ -108,14 +104,14 @@ class simpleapp_tk(Tkinter.Tk):
     def initialize(self):
         self.grid()
 
-	#Create pull down menu
+    #Create pull down menu
         self.variable = Tkinter.StringVar()
         self.variable.set(self.star_names[0]) # default value
         self.w = apply(Tkinter.OptionMenu, (self, self.variable) + tuple(self.star_names))
         self.w.grid(column=1,row=0,sticky='EW')
 
 
-	#Create text entry box
+    #Create text entry box
         self.entryVariable = Tkinter.StringVar()
         self.entry = Tkinter.Entry(self,textvariable=self.entryVariable)
         self.entry.grid(column=0,row=0,sticky='EW')
@@ -124,19 +120,19 @@ class simpleapp_tk(Tkinter.Tk):
         self.labelVariable = Tkinter.StringVar()
         label = Tkinter.Label(self,textvariable=self.labelVariable,
                               anchor="w", fg="white", bg="black", font=("Courier", 300, "bold"))
-	
-	self.azelVariable = Tkinter.StringVar()
+
+        self.azelVariable = Tkinter.StringVar()
         azel = Tkinter.Label(self,textvariable=self.azelVariable,
                               anchor="w", fg="black", bg="white", font=("Courier", 12))
-	azel.grid(column=0,row=1)
+        azel.grid(column=0,row=1)
 
-	button=Tkinter.Button(self,text=u"Send Message",command=self.OnPressOK)
-	button.grid(column=1,row=1)
-    
-	label.grid(column=0,row=2,columnspan=2,sticky='EW')
+        button=Tkinter.Button(self,text=u"Send Message",command=self.OnPressOK)
+        button.grid(column=1,row=1)
+
+        label.grid(column=0,row=2,columnspan=2,sticky='EW')
         self.labelVariable.set(u"                ")
 
-	
+
 
 
         self.grid_columnconfigure(0,weight=1)
@@ -147,17 +143,21 @@ class simpleapp_tk(Tkinter.Tk):
         self.entry.selection_range(0, Tkinter.END)
 
     def OnPressEnter(self,event):
-	star=self.variable.get()
-	az=self.star_data[star][0][1]
-	el=self.star_data[star][0][2]
-	print "I got "+star+" and ("+str(az)+","+str(el)+")"
-	self.azelVariable.set(" Go to "+str(az)+","+str(el))
+        self.star=self.variable.get()
+        print self.star
+        print self.star_data[self.star]
+        (self.distance,self.az,self.el,self.star_type)=self.star_data[self.star]
+        print self.star_data[self.star]
+        #az=self.star_data[star][0][1]
+        #el=self.star_data[star][0][2]
+        print "I got "+self.star+" and ("+str(self.az)+","+str(self.el)+")"
+        self.azelVariable.set(" Go to "+str(self.az)+","+str(self.el))
         self.update_idletasks()
 
 
 
 
-	#What to do when user presses OK
+    #What to do when user presses OK
     def OnPressOK(self):
         input=self.entryVariable.get()
         for letter in input:
@@ -182,41 +182,65 @@ class simpleapp_tk(Tkinter.Tk):
                     time.sleep(0.5*self.factor)
             time.sleep(0.5*self.factor)
 
-	
+
         self.entry.focus_set()
         self.entry.selection_range(0, Tkinter.END)
         display_string=input
         self.labelVariable.set(display_string)
         self.update_idletasks()
-        self.print_out(display_string,self.variable.get())
+        self.print_out(display_string)
 
     def dot(self):
-        self.led_pin.set()
-
+        if not(__debug__): self.led_pin.set()
         time.sleep(0.2*self.factor)
-        self.led_pin.reset()
+        if not(__debug__): self.led_pin.reset()
         time.sleep(0.2*self.factor)
 
     def dash(self):
-        self.led_pin.set()
+        if not(__debug__): self.led_pin.set()
 #print "dash"
         time.sleep(0.5*self.factor)
-        self.led_pin.reset()
+        if not(__debug__): self.led_pin.reset()
         time.sleep(0.2*self.factor)
 
-    def print_out(self, message,star_name):
-   	lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-	output="*****************\n"
-	
-        output+= "Following message sent at " + time.ctime()+"\n"
-        output+= message+"\n"
-        output+= "star: "+star_name+"\n"
-        output+= "*****************"
-	lpr.stdin.write(output)
-        lpr.stdin.close()
+    def print_out(self, message):
+        '''
+What I want it to say
+    Message: hi honey
+    Date Sent: 2015-11-16 18:55:43
+    Target: Polaris
+    Type: Brown Dwarf
+    Size: 4 sols
+    Distance: 123 light years (6,870,000,000,000 miles)
+    Date of return: 2223-11-16 (262 years from now)
+    Transmitted wavelength: 421nm
+    Transmitted Power Density: 0.5 W/3mm = 70,000 W/m^2
+    Return Power Density: 1e-34 W/m^2 = 0.00000000000000000000000000000000000000000000000000001 W/m^2
+    '''
+
+        now = datetime.datetime.now()
+        tt=now.timetuple()
+        (year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst)=tt
+
+        if not(__debug__): lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
+
+        things=["*****************",
+        "Message: "+message,
+       # "Date message sent: " +  now.strftime("%B %d, %Y %I:%M:%S %p"),
+        "Date message sent: " +  '{0}-{1}-{2} {3}:{4}:{5}'.format(year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
 
 
-	print output
+        "Target star: "+self.star,
+        "Type: "+self.star_type,
+        "Message arrival date: " +  '{0}-{1}-{2} {3}:{4}:{5}'.format(str(int(year)+2*int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
+        "*****************"
+        ]
+        output="\n".join(things)
+        print output
+        if not(__debug__): lpr.stdin.write(output)
+        if not(__debug__): lpr.stdin.close()
+
+
 if __name__ == "__main__":
     app = simpleapp_tk(None)
     app.title('my application')

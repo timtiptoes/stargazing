@@ -1,5 +1,8 @@
-Altair,16.73,259,28.5,A7IV-V
-Capella,42.80,54,33,M1:_comp
-Vega,25.04,298,29,A0Vvar
-Polaris,432.57,0.5,38,F7:lb-llv_SB
-Deneb,1411.93,299,50,A2Ia
+Star,Distance,azimuth,elevation,type,Spectral Type,funfact
+Altair,17,259,28,star,A7IV-V,Portends danger from reptiles
+Capella,43,54,33,star,M1:_comp, Really four stars. Two pairs of binary stars 10000 AU's apart
+Vega,25,298,29,star,A0Vvar,First star to be photographed other than the sun
+Polaris,432,0,38,star,F7:lb-llv_SB,Also called the North Star because all stars seem to rotate around it. Used for navigation for millenia
+Deneb,1411,299,50,star,A2Ia,Tail of the swan constellation ( Cygnus)
+Andromeda,2580000,71,67,galaxy,,Has 1 trillion stars in it
+EGSY8p7,13200000000,330,12,galaxy,,Most distant object known so far

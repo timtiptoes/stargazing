@@ -24,6 +24,7 @@ import time
 import datetime
 import Tkinter
 import subprocess
+import math
 
 
 
@@ -34,7 +35,7 @@ class simpleapp_tk(Tkinter.Tk):
     star_names=[]
     f = open('../data/star_data.txt')
     csv_f = csv.reader(f)
-
+    next(f)
     for row in csv_f:
         print row
         star_names.append(row[0])
@@ -146,7 +147,8 @@ class simpleapp_tk(Tkinter.Tk):
         self.star=self.variable.get()
         print self.star
         print self.star_data[self.star]
-        (self.distance,self.az,self.el,self.star_type)=self.star_data[self.star]
+        (self.distance,self.az,self.el,self.star_type,self.spectral_type,self.funfact)=self.star_data[self.star]
+
         print self.star_data[self.star]
         #az=self.star_data[star][0][1]
         #el=self.star_data[star][0][2]
@@ -154,7 +156,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.azelVariable.set(" Go to "+str(self.az)+","+str(self.el))
         self.update_idletasks()
 
-
+    def power(self,d): return (1.79e-22)/(d*d)
 
 
     #What to do when user presses OK
@@ -221,20 +223,30 @@ What I want it to say
         now = datetime.datetime.now()
         tt=now.timetuple()
         (year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst)=tt
-
+        p=self.power(int(self.distance))
+        e=-int(math.log10(p))
+        m=p*10**e
         if not(__debug__): lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
 
         things=["*****************",
         "Message: "+message,
        # "Date message sent: " +  now.strftime("%B %d, %Y %I:%M:%S %p"),
-        "Date message sent: " +  '{0}-{1}-{2} {3}:{4}:{5}'.format(year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
+        "Date message sent:    " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
+        "Message arrival date: " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(str(int(year)+int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
+        "Message return date:  " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(str(int(year)+2*int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
 
-
-        "Target star: "+self.star,
-        "Type: "+self.star_type,
-        "Message arrival date: " +  '{0}-{1}-{2} {3}:{4}:{5}'.format(str(int(year)+2*int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
+        "Target "+self.star_type+": "+self.star]
+        if (self.spectral_type): things.append("Spectral Type: "+self.spectral_type)
+        things.extend([
+        "Distance from Earth: "+"{:,}".format(int(self.distance)) + " light years",
+        "Signal wavelength: 520 nm",
+        "Outgoing Power Density: 161,290 W/m^2",
+        "    or                  1.612e5 W/m^2",
+        "Return Power Density: "+str(self.power(int(self.distance)))+" W/m^2",
+        "    or                "+"0."+str(0)*e+str(int(m*1000))+" W/m^2",
+        "Fun Fact: "+self.funfact,
         "*****************"
-        ]
+        ])
         output="\n".join(things)
         print output
         if not(__debug__): lpr.stdin.write(output)

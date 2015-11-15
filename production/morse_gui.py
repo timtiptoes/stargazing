@@ -1,19 +1,5 @@
 #!/usr/bin/python
 
-'''
-To do
- - verify that this runs on  tegra
-Improvements
--be able to pull up previous message and print
--log all messages sent
--pull down menu of stars
--spinning graphic of star with facts about star
-
-'''
-
-
-# -*- coding: iso-8859-1 -*-
-# Taken from http://sebsauvage.net/python/gui/
 if not(__debug__): from sysfs.gpio import GPIOController
 if not(__debug__): from sysfs.gpio import GPIOPinDirection as Direction
 if not(__debug__): from sysfs.gpio import GPIOPinEdge as Edge
@@ -25,8 +11,6 @@ import datetime
 import Tkinter
 import subprocess
 import math
-
-
 
 
 class simpleapp_tk(Tkinter.Tk):

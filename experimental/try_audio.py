@@ -67,7 +67,7 @@ class simpleapp_tk():
 
     #What to do when user presses OK
     def __init__(self):
-        input="PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS PARIS "
+        input="PARIS"
           #    1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
         self.factor=0.1
         coded_output=""
@@ -98,7 +98,7 @@ class simpleapp_tk():
     def dot(self):
         print "dot"
         print "open shutter"
-        subprocess.call(["cvlc", "--play-and-exit", "~/data/dot.wav"])
+        subprocess.call(["cvlc", "--play-and-exit", "/home/tim/github/stargazing/data/dot.wav"])
         time.sleep(self.factor)
         print "close shutter"
         time.sleep(self.factor)
@@ -106,7 +106,7 @@ class simpleapp_tk():
     def dash(self):
         print "dash"
         print "shutter open"
-        subprocess.call(["cvlc", "--play-and-exit", "~/data/dash.wav"])
+        subprocess.call(["cvlc", "--play-and-exit", "/home/tim/github/stargazing/data/dash.wav"])
         time.sleep(3*self.factor)
         print "shutter closed"
         time.sleep(self.factor)

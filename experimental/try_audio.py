@@ -98,7 +98,7 @@ class simpleapp_tk():
     def dot(self):
         print "dot"
         print "open shutter"
-        subprocess.call(["cvlc", "--play-and-exit", "dot.wav"]) 
+        subprocess.call(["cvlc", "--play-and-exit", "~/data/dot.wav"])
         time.sleep(self.factor)
         print "close shutter"
         time.sleep(self.factor)
@@ -106,7 +106,7 @@ class simpleapp_tk():
     def dash(self):
         print "dash"
         print "shutter open"
-        subprocess.call(["cvlc", "--play-and-exit", "dash.wav"])
+        subprocess.call(["cvlc", "--play-and-exit", "~/data/dash.wav"])
         time.sleep(3*self.factor)
         print "shutter closed"
         time.sleep(self.factor)

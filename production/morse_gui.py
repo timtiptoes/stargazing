@@ -145,11 +145,17 @@ class simpleapp_tk(Tkinter.Tk):
 
     #What to do when user presses OK
     def OnPressOK(self):
-        input=self.entryVariable.get()
+        inputfull=self.entryVariable.get()
+        input=inputfull[:140]
+        self.factor=0.1
+        coded_output=""
         for letter in input:
             if (letter == ' '):
-                display_string = "<pause>"
+                display_string = "<space>"
+                time.sleep(7*self.factor)
+                coded_output+=" "
             else:
+                coded_output+=self.CODE[letter.upper()]+" "
                 display_string = letter + ":   "
             self.labelVariable.set(display_string)
             self.update_idletasks()
@@ -166,7 +172,7 @@ class simpleapp_tk(Tkinter.Tk):
                     self.dot()
                 else:
                     time.sleep(0.5*self.factor)
-            time.sleep(0.5*self.factor)
+            time.sleep(3*self.factor)
 
 
         self.entry.focus_set()
@@ -174,22 +180,22 @@ class simpleapp_tk(Tkinter.Tk):
         display_string=input
         self.labelVariable.set(display_string)
         self.update_idletasks()
-        self.print_out(display_string)
+        self.print_out(display_string,coded_output)
 
     def dot(self):
         if not(__debug__): self.led_pin.set()
-        time.sleep(0.2*self.factor)
+        time.sleep(self.factor)
         if not(__debug__): self.led_pin.reset()
-        time.sleep(0.2*self.factor)
+        time.sleep(self.factor)
 
     def dash(self):
         if not(__debug__): self.led_pin.set()
 #print "dash"
-        time.sleep(0.5*self.factor)
+        time.sleep(3*self.factor)
         if not(__debug__): self.led_pin.reset()
-        time.sleep(0.2*self.factor)
+        time.sleep(self.factor)
 
-    def print_out(self, message):
+    def print_out(self, message,coded_output):
         '''
 What I want it to say
     Message: hi honey
@@ -214,6 +220,7 @@ What I want it to say
 
         things=["*****************",
         "Message: "+message,
+        "Coded Message: "+coded_output,
        # "Date message sent: " +  now.strftime("%B %d, %Y %I:%M:%S %p"),
         "Date message sent:    " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
         "Message arrival date: " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(str(int(year)+int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),

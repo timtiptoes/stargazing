@@ -108,6 +108,8 @@ class simpleapp_tk():
     def dash(self):
         print "dash"
         print "shutter open"
+        subprocess.call(["amixer","-D", "pulse", "sset", "Master", "4%"])
+
         subprocess.call(["cvlc", "--play-and-exit", "/home/tim/github/stargazing/data/dash.wav"])
         time.sleep(3*self.factor)
         print "shutter closed"

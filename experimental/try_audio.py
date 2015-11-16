@@ -70,6 +70,8 @@ class simpleapp_tk():
         input="e"
           #    1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
         self.factor=100
+        (self.factor,self.audio_dot,self.audio_dash) = get_speed_factors(input)
+
         coded_output=""
         for letter in input:
             print letter*20
@@ -111,6 +113,13 @@ class simpleapp_tk():
         print "shutter closed"
         time.sleep(self.factor)
 
+    def get_speed_factors(input):
+        if (len(input)<=10):
+            return (1,'audiocheck.net_sin_800Hz_-3dBFS_1.0s.wav','audiocheck.net_sin_800Hz_-3dBFS_3s.wav')
+        elif (len(input)<=50):
+            return(0.5,'audiocheck.net_sin_800Hz_-3dBFS_0.5s.wav','audiocheck.net_sin_800Hz_-3dBFS_1.5s.wav')
+        else:
+            return(0.1,'audiocheck.net_sin_800Hz_-3dBFS_0.1s.wav','audiocheck.net_sin_800Hz_-3dBFS_0.3s.wav')
 
 
 

@@ -67,9 +67,9 @@ class simpleapp_tk():
 
     #What to do when user presses OK
     def __init__(self):
-        input="PARIS"
+        input="e"
           #    1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-        self.factor=0.1
+        self.factor=100
         coded_output=""
         for letter in input:
             print letter*20

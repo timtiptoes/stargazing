@@ -153,7 +153,10 @@ class simpleapp_tk(Tkinter.Tk):
     def OnPressOK(self):
         inputfull=self.entryVariable.get()
         input=inputfull[:140]
-        self.factor=0.1
+	if len(input)>10:
+	        self.factor=0.1/(1+(len(input)-10)*6/130)
+	else:
+		self.factor=0.1
         coded_output=""
         for letter in input:
             if (letter == ' '):

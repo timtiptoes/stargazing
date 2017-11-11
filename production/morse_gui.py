@@ -4,7 +4,13 @@ if not(__debug__): from sysfs.gpio import GPIOController
 if not(__debug__): from sysfs.gpio import GPIOPinDirection as Direction
 if not(__debug__): from sysfs.gpio import GPIOPinEdge as Edge
 
-
+#2016-11-19
+#Some things to remind you:
+#To run this, run sudo python -O morse_gui.py  the -O makes the __debug__ flag false, so it will click and print
+#You need to modify the printer's form feed length from the default of 11" to 5.5" for both page length and page cut length
+#To access settings. Press 'MODE' button and 'menu' should illuminiate. Then press "GROUP' until 'Vertical Control' Then Item until you
+#see one of page length and page cut length and then item until you get to 5.5 and 5.5
+#After typing in the message you have to hit return and THEN click 'Send Message'
 import csv
 import time
 import datetime
@@ -104,7 +110,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.entryVariable.set(u"Enter text here.")
         self.labelVariable = Tkinter.StringVar()
         label = Tkinter.Label(self,textvariable=self.labelVariable,
-                              anchor="w", fg="white", bg="black", font=("Courier", 300, "bold"))
+                              anchor="w", fg="white", bg="black", font=("Courier", 200, "bold"))
 
         self.azelVariable = Tkinter.StringVar()
         azel = Tkinter.Label(self,textvariable=self.azelVariable,
@@ -209,7 +215,6 @@ What I want it to say
     Transmitted Power Density: 0.5 W/3mm = 70,000 W/m^2
     Return Power Density: 1e-34 W/m^2 = 0.00000000000000000000000000000000000000000000000000001 W/m^2
     '''
-
         now = datetime.datetime.now()
         tt=now.timetuple()
         (year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst)=tt

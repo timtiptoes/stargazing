@@ -220,8 +220,24 @@ What I want it to say
     '''
         now = datetime.datetime.now()
         tt=now.timetuple()
-        (year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst)=tt
-        p=self.power(int(self.distance))
+	(year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst)=tt
+
+	
+	if float(self.distance)<10000:
+		arrival_time=now+datetime.timedelta(0,float(self.distance)*365*24*3600)
+		return_time=now+datetime.timedelta(0,float(self.distance)*365*24*3600*2)
+		at=arrival_time.timetuple()
+		rt=return_time.timetuple()
+        	(ayear,amonth,aday,ahour,amin,asec,atm_wday,atm_yday,atm_isdst)=at
+        	(ryear,rmonth,rday,rhour,rmin,rsec,rtm_wday,rtm_yday,rtm_isdst)=rt
+	else:
+		(ayear,amonth,aday,ahour,amin,asec,atm_wday,atm_yday,atm_isdst)=tt
+        	(ryear,rmonth,rday,rhour,rmin,rsec,rtm_wday,rtm_yday,rtm_isdst)=tt
+		ayear+=int(self.distance)
+		ryear+=int(self.distance)*2	
+	
+        p=self.power(float(self.distance))
+
         e=-int(math.log10(p))
         m=p*10**e
         if not(__debug__): lpr =  subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
@@ -231,17 +247,17 @@ What I want it to say
         "Coded Message: "+coded_output,
        # "Date message sent: " +  now.strftime("%B %d, %Y %I:%M:%S %p"),
         "Date message sent:    " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(year,month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
-        "Message arrival date: " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(str(int(year)+int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
-        "Message return date:  " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(str(int(year)+2*int(self.distance)),month,day,hour,min,sec,tm_wday,tm_yday,tm_isdst),
+        "Message arrival date: " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(ayear,amonth,aday,ahour,amin,asec,atm_wday,atm_yday,atm_isdst),
+        "Message return date:  " +  '{}-{:0>2d}-{:0>2d} {:0>2d}:{:0>2d}:{:0>2d}'.format(ryear,rmonth,rday,rhour,rmin,rsec,rtm_wday,rtm_yday,rtm_isdst),
 
         "Target "+self.star_type+": "+self.star]
         if (self.spectral_type): things.append("Spectral Type: "+self.spectral_type)
         things.extend([
-        "Distance from Earth: "+"{:,}".format(int(self.distance)) + " light years",
+        "Distance from Earth: "+"{:,}".format(float(self.distance)) + " light years",
         "Signal wavelength: 520 nm",
         "Outgoing Power Density: 161,290 W/m^2",
         "    or                  1.612e5 W/m^2",
-        "Return Power Density: "+str(self.power(int(self.distance)))+" W/m^2",
+        "Return Power Density: "+str(self.power(float(self.distance)))+" W/m^2",
         "    or                "+"0."+str(0)*e+str(int(m*1000))+" W/m^2",
         "Fun Fact: "+self.funfact,
         "*****************"

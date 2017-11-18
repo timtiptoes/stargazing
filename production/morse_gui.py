@@ -154,7 +154,7 @@ class simpleapp_tk(Tkinter.Tk):
         inputfull=self.entryVariable.get()
         input=inputfull[:140]
 	if len(input)>10:
-	        self.factor=0.1/(1+(len(input)-10)*6/130)
+	        self.factor=0.1/(1+(len(input)-10)/130)
 	else:
 		self.factor=0.1
         coded_output=""

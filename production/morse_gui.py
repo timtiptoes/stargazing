@@ -93,6 +93,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.initialize()
 
     def initialize(self):
+	self.file=open("messages.log","a")
         self.grid()
 
     #Create pull down menu
@@ -190,6 +191,7 @@ class simpleapp_tk(Tkinter.Tk):
         self.labelVariable.set(display_string)
         self.update_idletasks()
         self.print_out(display_string,coded_output)
+	
 
     def dot(self):
         if not(__debug__): self.led_pin.set()
@@ -266,7 +268,7 @@ What I want it to say
         print output
         if not(__debug__): lpr.stdin.write(output)
         if not(__debug__): lpr.stdin.close()
-
+	self.file.write(message+"\n")
 
 if __name__ == "__main__":
     app = simpleapp_tk(None)
